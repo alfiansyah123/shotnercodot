@@ -97,8 +97,9 @@ export async function onRequest(context) {
         .single();
 
     if (error || !link) {
-        // Not found -> pass to frontend (SPA 404)
-        return context.next();
+        // Not found -> serve SPA index.html for frontend routing
+        const assetUrl = new URL('/', context.request.url);
+        return context.env.ASSETS.fetch(assetUrl);
     }
 
     // 2. Anti-Spam / Bot Check
